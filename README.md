@@ -17,7 +17,22 @@ git clone https://github.com/AgungArif700/cinema21-get-now-playing.git
 cd cinema21-get-now-playing
 ```
 
-2. **Install dependencies menggunakan pip** ini:
+2. **Install msedgedriver**:
+  * Cek versi Microsoft Edge kamu:
+      Buka Edge → klik titik tiga (kanan atas) → Help and feedback > About Microsoft Edge
+      Catat versinya, contoh: 116.0.1938.81
+  * Kunjungi link ini:
+    👉 https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
+
+  * Pilih versi Edge yang sesuai dan unduh msedgedriver
+  * Ekstrak file msedgedriver.exe ke C:\Windows
+
+setelah itu periksa msedgedriver apakah sudah siap digunakan
+```bash
+where msedgedriver
+```
+
+3. **Install dependencies menggunakan pip** ini:
 ```bash
 pip install -r requirements.txt
 ```
