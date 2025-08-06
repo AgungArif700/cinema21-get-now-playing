@@ -13,8 +13,8 @@ Proyek ini bertujuan untuk **mengambil daftar judul film yang sedang tayang** di
 1. **Clone repository** ini:
 
 ```bash
-git clone https://github.com/username/nama-repo.git
-cd nama-repo
+git clone https://github.com/AgungArif700/cinema21-get-now-playing.git
+cd cinema21-get-now-playing
 ```
 
 2. **Install dependencies menggunakan pip** ini:
