@@ -15,12 +15,12 @@ Proyek ini bertujuan untuk **mengambil daftar judul film yang sedang tayang** di
 ```bash
 git clone https://github.com/username/nama-repo.git
 cd nama-repo
-'''
+```
 
 2. **Install dependencies menggunakan pip **:
-'''pip install -r requirements.txt
+```pip install -r requirements.txt
 Pastikan Python 3 sudah terinstall di sistem kamu.
-'''
+```
 
 ▶️ Cara Menjalankan
 Jalankan program dengan perintah:
