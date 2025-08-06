@@ -18,11 +18,14 @@ cd cinema21-get-now-playing
 ```
 
 2. **Install dependencies menggunakan pip** ini:
-```pip install -r requirements.txt
-Pastikan Python 3 sudah terinstall di sistem kamu.
+```bash
+pip install -r requirements.txt
 ```
+Pastikan Python 3 sudah terinstall di sistem kamu.
 
 ## ▶️ Cara Menjalankan
 Jalankan program dengan perintah:
 
-```python main.py```
+```bash 
+python main.py
+```
