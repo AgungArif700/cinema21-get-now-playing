@@ -6,7 +6,8 @@ import time
 import json
 
 
-driver = webdriver.Chrome() # Buka Chrome
+# driver = webdriver.Chrome() # Buka Chrome
+driver = webdriver.Edge()  # Gunakan Edge, pastikan msedgedriver sudah terpasang
 
 try:
     driver.get("https://m.21cineplex.com/id/movies?tabs=now-playing")
@@ -39,4 +40,4 @@ except KeyboardInterrupt:
 
 finally:
     input("Tekan Enter untuk keluar...")
-    # driver.quit()
+    driver.quit()
