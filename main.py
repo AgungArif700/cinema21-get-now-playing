@@ -27,9 +27,10 @@ try:
             with open("log_get_file.txt","a") as file_log:
                 file_log.write("\nJudul Film ({}): \n".format(time.strftime("%H:%M:%S")))
 
-            for title in titles:
-                print("-", title.text)
-                data_judul.append(title.text)
+                for title in titles:
+                    print("-", title.text)
+                    file_log.write(f"- {title.text}\n")
+                    data_judul.append(title.text)
 
             #save 
             with open("data.json","w") as file_json:
