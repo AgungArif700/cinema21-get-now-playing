@@ -24,6 +24,8 @@ try:
             titles = driver.find_elements(By.CSS_SELECTOR, "h4.line-clamp-2.no-break")
 
             print("\nJudul Film ({}):".format(time.strftime("%H:%M:%S")))
+            with open("log_get_file.txt","a") as file_log:
+                file_log.write("\nJudul Film ({}): \n".format(time.strftime("%H:%M:%S")))
 
             for title in titles:
                 print("-", title.text)
@@ -33,7 +35,7 @@ try:
             with open("data.json","w") as file_json:
                 json.dump(data_judul,file_json,indent=4)
 
-            time.sleep(2)  # Tunggu sebelum refresh berikutnya
+            time.sleep(15)  # Tunggu sebelum refresh berikutnya
             driver.refresh()  # Refresh halaman
             print("Refresh halaman")
         except (TimeoutException, WebDriverException) as e:
