@@ -6,47 +6,78 @@ from selenium.common.exceptions import TimeoutException, WebDriverException
 import time
 import json
 
+URL = "https://m.21cineplex.com/id/movies?tabs=now-playing"
+MAX_REFRESH = 50  # Ganti sesuai kebutuhan
+refresh_count = 0
 
-# driver = webdriver.Chrome() # Buka Chrome
-driver = webdriver.Edge()  # Gunakan Edge, pastikan msedgedriver sudah terpasang
+def create_driver():
+    options = webdriver.EdgeOptions()
+    # Aktifkan jika ingin headless mode:
+    # options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--start-maximized")
+    options.add_argument("--disable-dev-shm-usage")
+
+    return webdriver.Edge(options=options)
+
+# Inisialisasi driver pertama kali
+driver = create_driver()
+wait = WebDriverWait(driver, 10)
 
 try:
-    driver.get("https://m.21cineplex.com/id/movies?tabs=now-playing")
-
+    driver.get(URL)
     print("Mulai memantau film... (Tekan Ctrl+C untuk berhenti)")
-    wait = WebDriverWait(driver, 10)
 
     while True:
         try:
             data_judul = []
-            # Tunggu sampai <h4> muncul kembali setelah refresh
             wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "h4.line-clamp-2.no-break")))
             titles = driver.find_elements(By.CSS_SELECTOR, "h4.line-clamp-2.no-break")
 
-            print("\nJudul Film ({}):".format(time.strftime("%H:%M:%S")))
-            with open("log_get_file.txt","a") as file_log:
-                file_log.write("\nJudul Film ({}): \n".format(time.strftime("%H:%M:%S")))
+            timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+            print(f"\nJudul Film ({timestamp}):")
+
+            with open("log_get_file.txt", "a", encoding="utf-8") as file_log:
+                file_log.write(f"\nJudul Film ({timestamp}):\n")
 
                 for title in titles:
                     print("-", title.text)
                     file_log.write(f"- {title.text}\n")
                     data_judul.append(title.text)
 
-            #save 
-            with open("data.json","w") as file_json:
-                json.dump(data_judul,file_json,indent=4)
+            with open("data.json", "w", encoding="utf-8") as file_json:
+                json.dump(data_judul, file_json, indent=4, ensure_ascii=False)
 
-            time.sleep(15)  # Tunggu sebelum refresh berikutnya
-            driver.refresh()  # Refresh halaman
-            print("Refresh halaman")
+            time.sleep(15)
+            driver.refresh()
+            refresh_count += 1
+            print(f"Refresh halaman ke-{refresh_count}")
+
+            # Restart driver tiap N refresh
+            if refresh_count >= MAX_REFRESH:
+                print("Restart driver untuk mencegah browser not responding...")
+                driver.quit()
+                driver = create_driver()
+                wait = WebDriverWait(driver, 10)
+                driver.get(URL)
+                refresh_count = 0
+
         except (TimeoutException, WebDriverException) as e:
-            print(f"[{time.strftime('%H:%M:%S')}] : Koneksi gagal atau halaman tidak bisa dimuat. Menunggu koneksi pulih...")
-            time.sleep(10)  # Tunggu 10 detik sebelum mencoba lagi
+            error_time = time.strftime("%Y-%m-%d %H:%M:%S")
+            print(f"[{error_time}] : Koneksi gagal atau halaman tidak bisa dimuat. Menunggu koneksi pulih...")
 
+            with open("log_get_file.txt", "a", encoding="utf-8") as file_log:
+                file_log.write(f"[{error_time}] : Gagal memuat halaman. Coba lagi nanti.\n")
+
+            time.sleep(10)
             try:
-                driver.get("https://m.21cineplex.com/id/movies?tabs=now-playing")
-            except:
-                pass
+                driver.get(URL)
+            except Exception as err:
+                print(f"[{error_time}] : Gagal membuka ulang halaman: {err}")
+                with open("log_get_file.txt", "a", encoding="utf-8") as file_log:
+                    file_log.write(f"[{error_time}] : Gagal membuka ulang halaman: {err}\n")
 
 except KeyboardInterrupt:
     print("\nPemantauan dihentikan oleh pengguna.")
